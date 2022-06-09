@@ -57,7 +57,7 @@ public class PaymentController {
 
     @Transactional
     @PutMapping("/update/{id}")
-    public ResponseEntity<PaymentEntity> updatePayment(@ModelAttribute PaymentEntity payment,
+    public ResponseEntity<PaymentEntity> updatePayment(@RequestBody PaymentEntity payment,
                                                        @PathVariable String id){
         try{
             PaymentEntity paymentEntity = paymentService.getById(Long.parseLong(id))
