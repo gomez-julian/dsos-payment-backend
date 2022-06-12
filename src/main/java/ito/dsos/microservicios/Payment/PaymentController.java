@@ -1,14 +1,17 @@
 package ito.dsos.microservicios.Payment;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDateTime;
-import java.util.List;
+import java.util.Map;
 import java.util.Optional;
+
+import static ito.dsos.microservicios.Payment.PaymentUtilities.errorResponse;
 
 @CrossOrigin
 @RequestMapping(path = "/api/payment")
@@ -22,81 +25,123 @@ public class PaymentController {
         this.paymentService = paymentService;
     }
 
-    /*
-    TODO: Fitrar por statusDelete
-     */
     @GetMapping("/records")
-    public ResponseEntity<List<PaymentEntity>>  getAll(){
+    public ResponseEntity<Object>  getAll(){
         try {
             return new ResponseEntity<>(paymentService.getAll(),HttpStatus.OK);
         }catch (Exception e){
-            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+            Map<String, Object> map = errorResponse(e.getClass().toString());
+            return new ResponseEntity<>(map,HttpStatus.UNPROCESSABLE_ENTITY);
         }
     }
 
-    /*
-    TODO: Validar y cachar los errores
-     */
     @GetMapping("/records/{id}")
-    public ResponseEntity<Optional<PaymentEntity>> getOne(@PathVariable String id){
-        return new ResponseEntity<>(paymentService.getById(Long.parseLong(id)),HttpStatus.OK);
+    public ResponseEntity<Object> getOne(@PathVariable String id){
+        try {
+            Optional<PaymentEntity> payment = paymentService.getById(Long.parseLong(id));
+            if(!payment.isPresent())
+                return new ResponseEntity<>(errorResponse("No existe un pago con ese ID"),HttpStatus.NOT_FOUND);
+            return new ResponseEntity<>(payment,HttpStatus.OK);
+        }catch (Exception e){
+            Map<String, Object> map = errorResponse(e.getClass().toString());
+            return new ResponseEntity<>(map,HttpStatus.UNPROCESSABLE_ENTITY);
+        }
     }
 
     @PostMapping("/pay")
-    public ResponseEntity<PaymentEntity> postPayment(@RequestBody PaymentEntity payment){
+    public ResponseEntity<Object> postPayment(@RequestBody PaymentEntity payment){
         try {
             if (payment == null)
                 return new ResponseEntity<>(HttpStatus.NO_CONTENT);
-            payment.setPaymentStatus("P");
-            payment.setPaymentDate(LocalDateTime.now());
+            if(payment.getPaymentAmount() <= 0)
+                return new ResponseEntity<>(errorResponse("La cantidad a pagar debe ser mayor a 0"),
+                                            HttpStatus.BAD_REQUEST);
+            if(!PaymentUtilities.verifyCard(payment.getPaymentMethod())) {
+                String message = "El formato de la cadena debe coincidir con la forma '0000-0000-0000-0000', '0000 0000 0000 0000', '0000000000000000' o Efectivo";
+                return new ResponseEntity<>(errorResponse(message),HttpStatus.BAD_REQUEST);
+            }
+            payment.setPaymentStatus("Pending");
+            LocalDateTime date = LocalDateTime.now();
+            payment.setPaymentDate(date);
+            payment.setLog("Created correctly: " + date);
+            payment.setStatusDelete(false);
+            payment.setUuid(PaymentUtilities.generateUUID4());
             return new ResponseEntity<>(paymentService.save(payment), HttpStatus.CREATED);
-        }catch (Exception e){
-            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }catch (DataIntegrityViolationException e){
+            Map<String, Object> map = errorResponse("Ya existe esa referencia");
+            return new ResponseEntity<>(map,HttpStatus.BAD_REQUEST);
+        }
+        catch (Exception e){
+            Map<String, Object> map = errorResponse(e.getClass().toString());
+            return new ResponseEntity<>(map,HttpStatus.UNPROCESSABLE_ENTITY);
         }
     }
 
     @Transactional
     @PutMapping("/update/{id}")
-    public ResponseEntity<PaymentEntity> updatePayment(@RequestBody PaymentEntity payment,
+    public ResponseEntity<Object> updatePayment(@RequestBody PaymentEntity payment,
                                                        @PathVariable String id){
         try{
             PaymentEntity paymentEntity = paymentService.getById(Long.parseLong(id))
                     .orElseThrow(() -> new IllegalStateException("Error al obtener la compra."));
-            return new ResponseEntity<>(paymentService.updateAll(payment, Long.parseLong(id)),
-                                                                HttpStatus.OK);
+            String paymentMethod = payment.getPaymentMethod();
+            if(paymentMethod != null && PaymentUtilities.verifyCard(paymentMethod))
+                paymentEntity.setPaymentMethod(paymentMethod);
+            if(payment.getPaymentAmount() > 0)
+                paymentEntity.setPaymentAmount(payment.getPaymentAmount());
+            if(payment.getReferenceID() != null)
+                paymentEntity.setReferenceID(payment.getReferenceID());
+            paymentEntity.setLog("Modified: " + LocalDateTime.now());
+            return new ResponseEntity<>(paymentService.save(paymentEntity), HttpStatus.ACCEPTED);
+        }catch (IllegalStateException e) {
+            Map<String, Object> map = errorResponse("No existe un pago con ese ID");
+            return new ResponseEntity<>(map,HttpStatus.BAD_REQUEST);
+        }catch (DataIntegrityViolationException e){
+            Map<String, Object> map = errorResponse("Ya existe esa referencia");
+            return new ResponseEntity<>(map,HttpStatus.BAD_REQUEST);
         }catch (Exception e){
-            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+            Map<String, Object> map = errorResponse(e.getClass().toString());
+            return new ResponseEntity<>(map,HttpStatus.UNPROCESSABLE_ENTITY);
         }
     }
 
-    /*
-    Cambia el status del pago a completado "C"
-     */
     @Transactional
     @PutMapping("/confirm/{id}")
-    public ResponseEntity<PaymentEntity> putPayment(@PathVariable String id){
+    public ResponseEntity<Object> putPayment(@PathVariable String id){
         try{
             PaymentEntity payment = paymentService.getById(Long.parseLong(id))
                     .orElseThrow(() -> new IllegalStateException("Error al obtener la compra"));
-            payment.setPaymentStatus("C");
-            payment.setPositivePaymentDate(LocalDateTime.now());
-            return new ResponseEntity<>(paymentService.save(payment), HttpStatus.CREATED);
-        }catch (Exception e) {
-            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+            payment.setPaymentStatus("Completed");
+            LocalDateTime date = LocalDateTime.now();
+            payment.setLog("Payment completed: " + date);
+            payment.setPositivePaymentDate(date);
+            return new ResponseEntity<>(paymentService.save(payment), HttpStatus.ACCEPTED);
+        }catch (IllegalStateException e) {
+            Map<String, Object> map = errorResponse("No existe un pago con ese ID");
+            return new ResponseEntity<>(map,HttpStatus.BAD_REQUEST);
+        }catch (Exception e){
+            Map<String, Object> map = errorResponse(e.getClass().toString());
+            return new ResponseEntity<>(map,HttpStatus.UNPROCESSABLE_ENTITY);
         }
     }
 
-    /*
-    Cambia el status a eliminado "D"
-    TODO: Cambiar el statusDelete a true
-     */
+
     @CrossOrigin
     @DeleteMapping("/delete/{id}")
-    public ResponseEntity<PaymentEntity> deletePayment(@PathVariable String id){
-        PaymentEntity payment = paymentService.getById(Long.parseLong(id))
-                .orElseThrow(() -> new IllegalStateException("Error al obtener la compra"));
-        paymentService.delete(Long.parseLong(id));
-        payment.setPaymentStatus("D");
-        return new ResponseEntity<>(payment, HttpStatus.OK);
+    public ResponseEntity<Object> deletePayment(@PathVariable String id){
+        try{
+            PaymentEntity payment = paymentService.getById(Long.parseLong(id))
+                    .orElseThrow(() -> new IllegalStateException("Error al obtener la compra"));
+            paymentService.delete(Long.parseLong(id));
+            payment.setPaymentStatus("Deleted");
+            payment.setStatusDelete(true);
+            return new ResponseEntity<>(payment, HttpStatus.ACCEPTED);
+        }catch (IllegalStateException e) {
+            Map<String, Object> map = errorResponse("No existe un pago con ese ID");
+            return new ResponseEntity<>(map,HttpStatus.BAD_REQUEST);
+        }catch (Exception e){
+            Map<String, Object> map = errorResponse(e.getClass().toString());
+            return new ResponseEntity<>(map,HttpStatus.UNPROCESSABLE_ENTITY);
+        }
     }
 }

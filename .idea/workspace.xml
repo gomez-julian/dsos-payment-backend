@@ -5,7 +5,12 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="05a391e2-c145-42ce-aba3-9be8851768e1" name="Changes" comment="">
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/ito/dsos/microservicios/MicroserviciosApplication.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/ito/dsos/microservicios/MicroserviciosApplication.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/ito/dsos/microservicios/Payment/PaymentController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/ito/dsos/microservicios/Payment/PaymentController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/ito/dsos/microservicios/Payment/PaymentEntity.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/ito/dsos/microservicios/Payment/PaymentEntity.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/ito/dsos/microservicios/Payment/PaymentService.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/ito/dsos/microservicios/Payment/PaymentService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/application.properties" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/application.properties" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -125,7 +130,8 @@
       <workItem from="1654280644247" duration="3045000" />
       <workItem from="1654296043680" duration="813000" />
       <workItem from="1654532528805" duration="121000" />
-      <workItem from="1654744761941" duration="38000" />
+      <workItem from="1654744761941" duration="330000" />
+      <workItem from="1654988824801" duration="15423000" />
     </task>
     <servers />
   </component>

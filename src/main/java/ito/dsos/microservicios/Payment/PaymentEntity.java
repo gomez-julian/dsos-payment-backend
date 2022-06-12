@@ -25,7 +25,6 @@ public class PaymentEntity {
 
     /*
     Fecha del pago, se calcula automáticamente
-    TODO: Cambiar la hora del servidor porque tiene una equivocada
      */
     @Column(name = "payment_date")
     private LocalDateTime paymentDate;
@@ -45,19 +44,21 @@ public class PaymentEntity {
 
     /*
     Monto de pago
-    TODO: Validar que no sea negativo, 0, etc.
+
      */
     @Column(name = "payment_amount", nullable = false)
     private Double paymentAmount;
 
+    @Column(name = "log")
+    private String log;
+
     /*
-    Si fue pago en efectivo, debe ser un String que solo diga EFECTIVO
-    Si fue pago con tarjeta, debe ser un String con el numero de la tarjeta de la forma
-    0000 0000 0000 0000
-    TODO: Validar que la entrada sea una de estas dos opciones
-    NOTA: No se debe guardar la fecha de expiracion o el CVV, ya que solo es para validar el pago
-     */
-    @Column(name = "payment_method", length = 16, updatable = false)
+        Si fue pago en efectivo, debe ser un String que solo diga EFECTIVO
+        Si fue pago con tarjeta, debe ser un String con el numero de la tarjeta de la forma
+        0000 0000 0000 0000
+        NOTA: No se debe guardar la fecha de expiracion o el CVV, ya que solo es para validar el pago
+         */
+    @Column(name = "payment_method", length = 19, updatable = false)
     private String paymentMethod;
 
     /*
@@ -67,6 +68,30 @@ public class PaymentEntity {
      */
     @Column(name = "status_delete")
     private Boolean statusDelete;
+
+    @Column(name = "uuid", length = 50)
+    private String uuid;
+
+    public String getUuid() {
+        return uuid;
+    }
+
+    public void setUuid(String uuid) {
+        this.uuid = uuid;
+    }
+
+    public String getLog() {
+        return log;
+    }
+
+    public PaymentEntity(String paymentStatus, String log) {
+        this.paymentStatus = paymentStatus;
+        this.log = log;
+    }
+
+    public void setLog(String log) {
+        this.log = log;
+    }
 
     public Boolean getStatusDelete() {
         return statusDelete;
@@ -91,6 +116,8 @@ public class PaymentEntity {
     public PaymentEntity() {
 
     }
+
+
 
     public PaymentEntity(String referenceID,
                          Double paymentAmount,

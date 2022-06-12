@@ -6,6 +6,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 public class PaymentService {
@@ -38,7 +39,7 @@ public class PaymentService {
     }
 
     public List<PaymentEntity> getAll(){
-        return paymentRepository.findAll();
+        return paymentRepository.findAll().stream().filter(e -> !e.getStatusDelete()).collect(Collectors.toList());
     }
 
     public PaymentEntity updateAll(PaymentEntity payment, Long id){
