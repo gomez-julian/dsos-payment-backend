@@ -49,6 +49,9 @@ public class PaymentEntity {
     @Column(name = "payment_amount", nullable = false)
     private Double paymentAmount;
 
+    /*
+    EL LOG GUARDA INFORMACIÓN ACERCA DEL ULTIMO CAMBIO OCURRIDO
+     */
     @Column(name = "log")
     private String log;
 
@@ -64,11 +67,13 @@ public class PaymentEntity {
     /*
     Si se elimina un pago, en vez de borrarlo de la base, de enciende este atributo, y ya no se
     mostrará cuando se hagan peticiones, para que quede registro de la info
-    TODO: Filtrar que no se muestre ningun registro con este atributo en true
      */
     @Column(name = "status_delete")
     private Boolean statusDelete;
 
+    /*
+    EL UUID ES EL VERIFICADOR DEL PAGO
+     */
     @Column(name = "uuid", length = 50)
     private String uuid;
 
