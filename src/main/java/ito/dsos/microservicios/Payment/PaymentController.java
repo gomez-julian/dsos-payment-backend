@@ -220,6 +220,41 @@ public class PaymentController {
         }
     }
 
+    @Transactional
+    @PutMapping("/cancel/{id}")
+    public ResponseEntity<Object> calcelPayment(@PathVariable String id){
+        try{
+            /*
+            SE RECUPERA EL PAGO POR EL ID, Y DE LO CONTRARIO MANDA UNA EXCEPTION
+             */
+            PaymentEntity payment = paymentService.getById(Long.parseLong(id))
+                    .orElseThrow(() -> new IllegalStateException("Error al obtener la compra"));
+            /*
+            SI SE RECUPERA CORRECTAMENTE, EMPIEZA A REALIZAR LA CONFIRMACION
+            1. SE CAMBIA EL ESTADO DEL PAGO A COMPLETO
+            2. SE CAMBIA EL LOG PARA INDICAR QUE YA FUE COMPLETADO EL PAGO
+            3. SE SETEA EL ATRIBUTO DE FECHA DE PAGO COMPLETADO A LA HORA ACTUAL
+             */
+            payment.setPaymentStatus("Canceled");
+            LocalDateTime date = LocalDateTime.now();
+            payment.setLog("Canceled: " + date);
+            payment.setPositivePaymentDate(null);
+            /*
+            SE GUARDA LA ENTIDAD Y SE REGRESA
+             */
+            return new ResponseEntity<>(paymentService.save(payment), HttpStatus.ACCEPTED);
+        }catch (IllegalStateException e) {
+            /*
+            SI NO SE ENCONTRÓ EL PAGO, SE MANDA EL ERROR
+             */
+            Map<String, Object> map = errorResponse("No existe un pago con ese ID");
+            return new ResponseEntity<>(map,HttpStatus.BAD_REQUEST);
+        }catch (Exception e){
+            Map<String, Object> map = errorResponse(e.getClass().toString());
+            return new ResponseEntity<>(map,HttpStatus.UNPROCESSABLE_ENTITY);
+        }
+    }
+
 
     @CrossOrigin
     @DeleteMapping("/delete/{id}")

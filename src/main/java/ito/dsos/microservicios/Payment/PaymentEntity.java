@@ -14,14 +14,8 @@ public class PaymentEntity {
     /*
     Referencia: Algun folio, recibo, orden de pago o identificador para el pago
      */
-    @Column(name = "reference_id", unique = true, length = 10, nullable = false)
+    @Column(name = "reference_id", unique = true, length = 10)
     private String referenceID;
-
-    /*
-    Codigo postal para el registro del pago
-     */
-    @Column(name = "address_cp", length = 5)
-    private String address_cp;
 
     /*
     Fecha del pago, se calcula automáticamente
@@ -29,10 +23,13 @@ public class PaymentEntity {
     @Column(name = "payment_date")
     private LocalDateTime paymentDate;
 
+    @Column(name = "sale_id")
+    private Integer saleID;
+
     /*
-    Pendiente, Parcial, Cancelada, Devuelta, Completada, etc.
-    TODO: Validar el dato enviado sea válido
-     */
+        Pendiente, Parcial, Cancelada, Devuelta, Completada, etc.
+        TODO: Validar el dato enviado sea válido
+         */
     @Column(name = "payment_status", length = 20)
     private String paymentStatus;
 
@@ -77,6 +74,14 @@ public class PaymentEntity {
     @Column(name = "uuid", length = 50)
     private String uuid;
 
+    public Integer getSaleID() {
+        return saleID;
+    }
+
+    public void setSaleID(Integer saleID) {
+        this.saleID = saleID;
+    }
+
     public String getUuid() {
         return uuid;
     }
@@ -106,10 +111,6 @@ public class PaymentEntity {
         this.paymentID = paymentID;
     }
 
-    public void setAddress_cp(String address_cp) {
-        this.address_cp = address_cp;
-    }
-
     public void setPaymentAmount(Double paymentAmount) {
         this.paymentAmount = paymentAmount;
     }
@@ -122,7 +123,11 @@ public class PaymentEntity {
 
     }
 
-
+    public PaymentEntity(Integer saleID, Double paymentAmount, String paymentMethod) {
+        this.saleID = saleID;
+        this.paymentAmount = paymentAmount;
+        this.paymentMethod = paymentMethod;
+    }
 
     public PaymentEntity(String referenceID,
                          Double paymentAmount,
@@ -162,10 +167,6 @@ public class PaymentEntity {
 
     public LocalDateTime getPaymentDate() {
         return paymentDate;
-    }
-
-    public String getAddress_cp() {
-        return address_cp;
     }
 
     public String getReferenceID() {
