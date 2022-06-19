@@ -38,9 +38,6 @@ public class PaymentService {
         return paymentRepository.findById(id);
     }
 
-    /*
-    AHORA PARA FILTRAR TODOS LOS DATOS POR STATUS DELETE, SE APLICA UN FILTRO ANTES DEL RETURN
-     */
     public List<PaymentEntity> getAll(){
         return paymentRepository.findAll().stream().filter(e -> !e.getStatusDelete()).collect(Collectors.toList());
     }

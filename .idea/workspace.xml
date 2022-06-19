@@ -8,7 +8,7 @@
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/ito/dsos/microservicios/Payment/PaymentController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/ito/dsos/microservicios/Payment/PaymentController.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/ito/dsos/microservicios/Payment/PaymentEntity.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/ito/dsos/microservicios/Payment/PaymentEntity.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/application.properties" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/application.properties" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/ito/dsos/microservicios/Payment/PaymentService.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/ito/dsos/microservicios/Payment/PaymentService.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -134,7 +134,9 @@
       <workItem from="1655141693703" duration="2256000" />
       <workItem from="1655351344473" duration="545000" />
       <workItem from="1655404804536" duration="104000" />
-      <workItem from="1655507640501" duration="1216000" />
+      <workItem from="1655507640501" duration="2094000" />
+      <workItem from="1655577124897" duration="3994000" />
+      <workItem from="1655591595951" duration="5947000" />
     </task>
     <servers />
   </component>
