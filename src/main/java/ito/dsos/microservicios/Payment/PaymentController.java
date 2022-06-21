@@ -2,6 +2,7 @@ package ito.dsos.microservicios.Payment;
 
 import ito.dsos.microservicios.Auth.RestService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Description;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -29,6 +30,7 @@ public class PaymentController {
         this.auth = restService;
     }
 
+    @Description("Historial de pagos")
     @GetMapping("/records")
     public ResponseEntity<Object> getAll() {
         try {
@@ -39,6 +41,7 @@ public class PaymentController {
         }
     }
 
+    @Description("Pago específico")
     @GetMapping("/records/{id}")
     public ResponseEntity<Object> getOne(@PathVariable String id) {
         try {
@@ -52,6 +55,7 @@ public class PaymentController {
         }
     }
 
+    @Description("Realizar un pago")
     @PostMapping("/pay")
     public ResponseEntity<Object> postPayment(@RequestBody PaymentEntity payment,
                                               @RequestHeader(value = "Authorization", required = false) String token) {
@@ -87,6 +91,7 @@ public class PaymentController {
         }
     }
 
+    @Description("Actualizar ciertos datos de un pago")
     @Transactional
     @PutMapping("/update/{id}")
     public ResponseEntity<Object> updatePayment(@RequestBody PaymentEntity payment,
@@ -122,6 +127,7 @@ public class PaymentController {
         }
     }
 
+    @Description("Confirmar un pago")
     @Transactional
     @PutMapping("/confirm/{id}")
     public ResponseEntity<Object> putPayment(@PathVariable String id,
@@ -149,6 +155,7 @@ public class PaymentController {
         }
     }
 
+    @Description("Cancelar un pago")
     @Transactional
     @PutMapping("/cancel/{id}")
     public ResponseEntity<Object> calcelPayment(@PathVariable String id,
@@ -177,6 +184,7 @@ public class PaymentController {
     }
 
 
+    @Description("Eliminar un pago")
     @CrossOrigin
     @DeleteMapping("/delete/{id}")
     public ResponseEntity<Object> deletePayment(@PathVariable String id,

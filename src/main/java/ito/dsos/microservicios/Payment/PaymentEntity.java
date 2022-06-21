@@ -29,7 +29,7 @@ public class PaymentEntity {
     @Column(name = "payment_amount", nullable = false)
     private Double paymentAmount;
 
-    @Column(name = "payment_method", length = 19, updatable = false)
+    @Column(name = "payment_method", length = 19)
     private String paymentMethod;
 
     @Column(name = "uuid", length = 50)

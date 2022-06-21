@@ -11,9 +11,6 @@ import java.util.TimeZone;
 @SpringBootApplication
 public class MicroserviciosApplication {
 
-	/*
-	PARA CAMBIAR LA HORA A LA DE ESTA ZONA HORARIA
-	 */
 	@PostConstruct
 	void started() {
 		TimeZone.setDefault(TimeZone.getTimeZone("America/Mexico_City"));
