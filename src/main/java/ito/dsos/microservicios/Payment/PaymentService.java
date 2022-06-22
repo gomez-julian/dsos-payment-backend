@@ -6,6 +6,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 public class PaymentService {
@@ -25,24 +26,11 @@ public class PaymentService {
         paymentRepository.deleteById(id);
     }
 
-    public PaymentEntity update(PaymentEntity paymentUpdate, Long id){
-        PaymentEntity paymentEntity = paymentRepository.findById(id)
-                .orElseThrow(() -> new IllegalStateException("El producto no existe"));
-        paymentEntity.setPaymentStatus(paymentUpdate.getPaymentStatus());
-        paymentEntity.setPositivePaymentDate(paymentUpdate.getPositivePaymentDate());
-        return paymentRepository.save(paymentEntity);
-    }
-
     public Optional<PaymentEntity> getById(Long id){
         return paymentRepository.findById(id);
     }
 
     public List<PaymentEntity> getAll(){
-        return paymentRepository.findAll();
-    }
-
-    public PaymentEntity updateAll(PaymentEntity payment, Long id){
-        payment.setPaymentID(id);
-        return paymentRepository.save(payment);
+        return paymentRepository.findAll().stream().filter(e -> !e.getStatusDelete()).collect(Collectors.toList());
     }
 }
