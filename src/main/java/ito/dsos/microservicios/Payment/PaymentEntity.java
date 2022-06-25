@@ -41,6 +41,17 @@ public class PaymentEntity {
     @Column(name = "log")
     private String log;
 
+    @Column(name = "descuento")
+    private Double descuento;
+
+    public Double getDescuento() {
+        return descuento;
+    }
+
+    public void setDescuento(Double descuento) {
+        this.descuento = descuento;
+    }
+
     public PaymentEntity(String paymentStatus, String log) {
         this.paymentStatus = paymentStatus;
         this.log = log;
@@ -54,6 +65,13 @@ public class PaymentEntity {
         this.saleID = saleID;
         this.paymentAmount = paymentAmount;
         this.paymentMethod = paymentMethod;
+    }
+
+    public PaymentEntity(String referenceID, Double paymentAmount, String paymentMethod, Double descuento) {
+        this.referenceID = referenceID;
+        this.paymentAmount = paymentAmount;
+        this.paymentMethod = paymentMethod;
+        this.descuento = descuento;
     }
 
     public PaymentEntity(String referenceID, Double paymentAmount, String paymentMethod) {

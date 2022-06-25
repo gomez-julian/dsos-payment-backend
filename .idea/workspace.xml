@@ -6,11 +6,8 @@
   <component name="ChangeListManager">
     <list default="true" id="05a391e2-c145-42ce-aba3-9be8851768e1" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/ito/dsos/microservicios/MicroserviciosApplication.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/ito/dsos/microservicios/MicroserviciosApplication.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/ito/dsos/microservicios/Payment/PaymentController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/ito/dsos/microservicios/Payment/PaymentController.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/ito/dsos/microservicios/Payment/PaymentEntity.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/ito/dsos/microservicios/Payment/PaymentEntity.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/ito/dsos/microservicios/Payment/PaymentService.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/ito/dsos/microservicios/Payment/PaymentService.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/ito/dsos/microservicios/Payment/PaymentUtilities.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/ito/dsos/microservicios/Payment/PaymentUtilities.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -77,7 +74,7 @@
     <property name="RunOnceActivity.ShowReadmeOnStart" value="true" />
     <property name="SHARE_PROJECT_CONFIGURATION_FILES" value="true" />
     <property name="WebServerToolWindowFactoryState" value="false" />
-    <property name="last_opened_file_path" value="$PROJECT_DIR$/../../../PLF/epsilo/AproximacionEpsilon" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$" />
     <property name="nodejs_package_manager_path" value="npm" />
     <property name="project.structure.last.edited" value="Project" />
     <property name="project.structure.proportion" value="0.0" />
@@ -142,6 +139,8 @@
       <workItem from="1655613250366" duration="2385000" />
       <workItem from="1655627632824" duration="198000" />
       <workItem from="1655762609337" duration="6550000" />
+      <workItem from="1656122462795" duration="52000" />
+      <workItem from="1656122580722" duration="729000" />
     </task>
     <servers />
   </component>

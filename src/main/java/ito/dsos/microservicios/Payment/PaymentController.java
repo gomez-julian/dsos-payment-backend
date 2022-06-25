@@ -60,10 +60,10 @@ public class PaymentController {
     public ResponseEntity<Object> postPayment(@RequestBody PaymentEntity payment,
                                               @RequestHeader(value = "Authorization", required = false) String token) {
         try {
-            if (token == null)
-                return new ResponseEntity<>(errorResponse("Favor enviar JWT en Headers como Authorization"), HttpStatus.UNAUTHORIZED);
-            if (!auth.verifyToken(token))
-                return new ResponseEntity<>(errorResponse("JWT Inválido o vencido"), HttpStatus.UNAUTHORIZED);
+            //if (token == null)
+            //    return new ResponseEntity<>(errorResponse("Favor enviar JWT en Headers como Authorization"), HttpStatus.UNAUTHORIZED);
+            //if (!auth.verifyToken(token))
+            //    return new ResponseEntity<>(errorResponse("JWT Inválido o vencido"), HttpStatus.UNAUTHORIZED);
             if (payment == null)
                 return new ResponseEntity<>(HttpStatus.NO_CONTENT);
             if (payment.getPaymentAmount() <= 0)
@@ -73,6 +73,9 @@ public class PaymentController {
                 String message = "El formato de la cadena debe coincidir con la forma '0000-0000-0000-0000', '0000 0000 0000 0000', '0000000000000000' o Efectivo";
                 return new ResponseEntity<>(errorResponse(message), HttpStatus.BAD_REQUEST);
             }
+            //AGREGA EL DESCUENTO Y LO CALCULA
+            if(payment.getDescuento() > 0 && payment.getDescuento() < 101)
+                payment.setPaymentAmount(payment.getPaymentAmount() * ((100 -payment.getDescuento()) / 100));
             payment.setPaymentStatus("Pending");
             LocalDateTime date = LocalDateTime.now();
             payment.setPaymentDate(date);
